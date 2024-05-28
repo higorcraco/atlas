@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="higor.craco" id="add_table_permission">
+        <createTable tableName="permission">
+            <column autoIncrement="true" name="id" startWith="4" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="permission_pkey"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="higor.craco" id="add_table_user_entity">
+        <createTable tableName="user_entity">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_entity_pkey"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="account_non_expired" type="BOOLEAN"/>
+            <column name="account_non_locked" type="BOOLEAN"/>
+            <column name="credentials_non_expired" type="BOOLEAN"/>
+            <column name="enabled" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="higor.craco" id="add_table_user_permission">
+        <createTable tableName="user_permission">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="up_user_fk"
+                             referencedTableName="user_entity"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="permission_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="up_permission_fk"
+                             referencedTableName="permission"
+                             referencedColumnNames="id"
+                />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

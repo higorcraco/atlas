@@ -1,16 +1,18 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/cardapio
+    url: jdbc:postgresql://localhost:5432/atlas
     username: postgres
     password: masterkey
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
   jpa:
     properties:
       hibernate:
-        format_sql: true
-    show-sql: true
+        format_sql: false
+    show-sql: false
     open-in-view: false
     hibernate:
-      ddl-auto: update
+  #      ddl-auto: validate
   security:
     jwt:
       token:
