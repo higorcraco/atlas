@@ -55,4 +55,10 @@ public class AuthService {
         return tokenProvider.createAccessToken(username, user.getRoles());
 
     }
+
+    public TokenDTO refreshToken(String username, String refreshToken) {
+        service.findByUsername(username);
+
+        return tokenProvider.refreshToken(refreshToken);
+    }
 }

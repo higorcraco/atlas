@@ -55,12 +55,21 @@ public class JwtTokenProvider {
     public TokenDTO createAccessToken(String username, List<String> roles) {
         Date now = new Date();
         Date validity = getValidity(now);
-        String accessToken = getAccessToken(username, roles, now, validity);
-        String refreshToken = getAccessToken(username, roles, now);
+        String accessToken = getAcessToken(username, roles, now, validity);
+        String refreshToken = getRefreshToken(username, roles, now);
         return new TokenDTO(username, true, now, validity, accessToken, refreshToken);
     }
 
-    private String getAccessToken(String username, List<String> roles, Date now, Date validity) {
+    public TokenDTO refreshToken(String refreshToken) {
+        refreshToken = removeBearerString(refreshToken);
+
+        DecodedJWT decodedJWT = decodedToken(refreshToken);
+        String username = decodedJWT.getSubject();
+        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+        return createAccessToken(username, roles);
+    }
+
+    private String getAcessToken(String username, List<String> roles, Date now, Date validity) {
         String issueUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         return JWT.create()
                 .withClaim("roles", roles)
@@ -72,7 +81,7 @@ public class JwtTokenProvider {
                 .strip();
     }
 
-    private String getAccessToken(String username, List<String> roles, Date now) {
+    private String getRefreshToken(String username, List<String> roles, Date now) {
         Date validityRefreshToken = getValidity(now, 3L);
         return JWT.create()
                 .withClaim("roles", roles)
@@ -90,16 +99,18 @@ public class JwtTokenProvider {
     }
 
     private DecodedJWT decodedToken(String token) {
-        Algorithm alg = Algorithm.HMAC256(secretKey.getBytes());
-        JWTVerifier verifier = JWT.require(alg).build();
+        JWTVerifier verifier = JWT.require(algorithm).build();
         return verifier.verify(token);
     }
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
+        return removeBearerString(bearerToken);
+    }
 
+    public String removeBearerString(String bearerToken) {
         if (Objects.nonNull(bearerToken) && bearerToken.startsWith(BEARER_STRING)) {
-            bearerToken = bearerToken.substring(BEARER_STRING.length());
+            return bearerToken.substring(BEARER_STRING.length());
         }
 
         return bearerToken;
