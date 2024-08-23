@@ -4,6 +4,7 @@ import br.com.cbtech.atlas.security.JWT.JwtTokenFilter;
 import br.com.cbtech.atlas.security.JWT.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -46,8 +47,9 @@ public class SecurityConfig {
                                         "/auth/signin",
                                         "/auth/refresh/**"
                                 ).permitAll()
-                                .requestMatchers("/api/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/users").hasAuthority("ADMIN")
                                 .requestMatchers("/users").denyAll()
+                                .anyRequest().authenticated()
                 )
                 .cors(Customizer.withDefaults())
                 .build();
@@ -55,6 +57,8 @@ public class SecurityConfig {
 
     @Bean
     PasswordEncoder passwordEncoder() {
+//        Another way to implement passwordEncoder
+//        return new BCryptPasswordEncoder();
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("", 8, 185000, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
         encoders.put(PBKDF2_ENCONDER, pbkdf2PasswordEncoder);
