@@ -16,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +28,7 @@ public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @Column(unique = true)
     private String username;
     private String password;
@@ -43,10 +43,9 @@ public class User implements UserDetails, Serializable {
     private List<Permission> permissions;
 
     public List<String> getRoles() {
-        List<String> roles = new ArrayList<>();
-
-        permissions.forEach(p -> roles.add(p.getDescription()));
-        return roles;
+        return permissions.stream()
+                .map(Permission::getDescription)
+                .toList();
     }
 
     public User() {
@@ -55,7 +54,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.permissions;
     }
 
     @Override
