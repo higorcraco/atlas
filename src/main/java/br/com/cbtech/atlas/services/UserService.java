@@ -47,10 +47,12 @@ public class UserService implements UserDetailsService {
     public User addCommonUser(User user) {
         Permission permission = permissionService.findById(3L);
 
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+
         User commonUser = new User();
         commonUser.setUsername(user.getUsername());
         commonUser.setPassword(
-                passwordEncoder.encode(user.getPassword()).split("\\{pbkdf2}")[1]
+                encodedPassword.split("\\{pbkdf2}")[1]
         );
 
         commonUser.setAccountNonExpired(Boolean.TRUE);
