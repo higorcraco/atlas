@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/atlas
+    username: postgres
+    password: masterkey
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
+    open-in-view: false
+    hibernate:
+  #      ddl-auto: validate
+  security:
+    jwt:
+      token:
+        secret-key: 53cr37
+        expire-length: 3600000
+
+
