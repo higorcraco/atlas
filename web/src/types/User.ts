@@ -5,4 +5,6 @@ export type User = {
 
 export type LoggedUser = {
   username?: string;
+  acessToken?: string;
+  refreshToken?: string;
 };

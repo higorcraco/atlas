@@ -1,13 +1,14 @@
 import axios from "axios";
-import { AuthService } from "../services";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../config/AuthContext";
 
-const useAxiosInterceptor = () => {
-  const { loggedUser, setLoggedUser } = useAuth();
+const useAxiosInterceptorConfigure = () => {
+  const auth = useAuth();
 
   axios.interceptors.request.use((config) => {
+    console.log("config.baseURL", config);
     const token = localStorage.getItem("token");
-    if (token) {
+    if (token && !config.url?.includes("/auth/")) {
+      console.log("adicionou header");
       config.headers["Authorization"] = `Bearer ${token}`;
     }
 
@@ -25,18 +26,15 @@ const useAxiosInterceptor = () => {
         try {
           const refreshToken = localStorage.getItem("refreshToken");
 
-          if (!refreshToken || !loggedUser?.username) {
+          if (!refreshToken || !auth.loggedUser?.username) {
             console.log("Não foi possivel atualizar o token");
           }
 
-          return AuthService.refreshToken(loggedUser!.username!, refreshToken!)
-            .then((data) => {
-              axios.defaults.headers.common[
-                "Authorization"
-              ] = `Bearer ${data.acessToken}`;
-              setLoggedUser({ username: data.username });
-            })
-            .finally(() => axios(originalRequest));
+          auth.refreshToken();
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${auth.loggedUser?.acessToken}`;
+          return axios(originalRequest);
         } catch (error) {
           window.location.href = "/login";
 
@@ -47,4 +45,4 @@ const useAxiosInterceptor = () => {
   );
 };
 
-export default useAxiosInterceptor;
+export default useAxiosInterceptorConfigure;

@@ -1,18 +1,21 @@
 import "./config/AxiosInterceptor";
-import Login from "./pages/Login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./config/AuthContext";
-import useAxiosInterceptor from "./config/AxiosInterceptor";
+import AxiosInterceptor from "./config/AxiosInterceptor";
+import MainRoutes from "./routes/Routes";
 
 function App() {
-  useAxiosInterceptor();
-
   return (
-    <AuthProvider>
-      <Login />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <AxiosInterceptor>
+          <MainRoutes />
+        </AxiosInterceptor>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
