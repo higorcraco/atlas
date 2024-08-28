@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { User } from "../domain/User";
-import { login } from "../services/AuthService";
+import { useAuth } from "../config/AuthContext";
+import { AuthService } from "../services";
+import { User } from "../types/User";
 
 const Login = () => {
   const [user, setUser] = useState<User>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { loggedUser, setLoggedUser } = useAuth();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    login(user.username!, user.password!);
+    AuthService.login(user.username!, user.password!).then(({ data }) => {
+      localStorage.setItem("token", data.acessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      setLoggedUser({ username: data.username });
+    });
   };
 
   return (

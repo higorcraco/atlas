@@ -5,6 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "baseUrl": "./src" // Define a base para caminhos relativos
+    "baseUrl": "./src", // Define a base para caminhos relativos
+    "isolatedModules": true
   }
 }

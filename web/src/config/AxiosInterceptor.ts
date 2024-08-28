@@ -1,32 +1,50 @@
 import axios from "axios";
+import { AuthService } from "../services";
+import { useAuth } from "./AuthContext";
 
-axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers["Authorization"] = "Bearer ${token}";
-  }
+const useAxiosInterceptor = () => {
+  const { loggedUser, setLoggedUser } = useAuth();
 
-  return config;
-});
+  axios.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
 
-axios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+    return config;
+  });
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
 
-      try {
-        const newToken = localStorage.getItem("refreshToken");
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
 
-        axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-        return axios(originalRequest);
-      } catch (error) {
-        window.location.href = "/login";
+        try {
+          const refreshToken = localStorage.getItem("refreshToken");
 
-        return Promise.reject(error);
+          if (!refreshToken || !loggedUser?.username) {
+            console.log("Não foi possivel atualizar o token");
+          }
+
+          return AuthService.refreshToken(loggedUser!.username!, refreshToken!)
+            .then((data) => {
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${data.acessToken}`;
+              setLoggedUser({ username: data.username });
+            })
+            .finally(() => axios(originalRequest));
+        } catch (error) {
+          window.location.href = "/login";
+
+          return Promise.reject(error);
+        }
       }
     }
-  }
-);
+  );
+};
+
+export default useAxiosInterceptor;

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:8080";
+const resource = `${API_URL}/auth`;
 
 type LoginResponse = {
   acessToken: string;
@@ -13,27 +14,22 @@ const setTokens = (data: LoginResponse) => {
   localStorage.setItem("refreshToken", data.refreshToken);
 };
 
-export const login = async (username: string, password: string) => {
+export const login = (username: string, password: string) => {
   try {
-    return await axios
-      .post(`${API_URL}/auth/signin`, { username, password })
-      .then(({ data }) => {
-        setTokens(data);
-        return true;
-      });
+    return axios.post(`${resource}/signin`, { username, password });
   } catch (error) {
     console.error("Erro ao fazer login", error);
-    return false;
+    return Promise.reject("Erro ao fazer login: " + error);
   }
 };
 
-export const refreshToken = async (refreshToken: string) => {
+export const refreshToken = async (username: string, refreshToken: string) => {
   try {
     return await axios
-      .post(`${API_URL}/refresh-token`, { refreshToken })
+      .post(`${resource}/refresh/${username}`, { refreshToken })
       .then(({ data }) => {
         setTokens(data);
-        return data.token;
+        return data;
       });
   } catch (error) {
     console.error("Erro ao fazer atualizar o token", error);
