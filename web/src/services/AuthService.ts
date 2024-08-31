@@ -1,7 +1,7 @@
 import axios from "axios";
+import API_BASE_URL from "../config/ApiConfig";
 
-const API_URL = "http://localhost:8080";
-const resource = `${API_URL}/auth`;
+const resource = `${API_BASE_URL}/auth`;
 
 type LoginResponse = {
   acessToken: string;
@@ -26,7 +26,9 @@ export const login = (username: string, password: string) => {
 export const refreshToken = async (username: string, refreshToken: string) => {
   try {
     return await axios
-      .post(`${resource}/refresh/${username}`, { refreshToken })
+      .put(`${resource}/refresh/${username}`, undefined, {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      })
       .then(({ data }) => {
         setTokens(data);
         return data;

@@ -44,6 +44,10 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public List<User> findAll() {
+        return repository.findAll();
+    }
+
     public User addCommonUser(User user) {
         Permission permission = permissionService.findById(3L);
 

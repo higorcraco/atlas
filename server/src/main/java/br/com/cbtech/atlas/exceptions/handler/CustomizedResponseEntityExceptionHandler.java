@@ -28,7 +28,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
-    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationException(Exception ex, WebRequest request) {
+    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationException(InvalidJwtAuthenticationException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 LocalDate.now(),
                 ex.getMessage(),

@@ -1,7 +1,6 @@
 package br.com.cbtech.atlas.security.JWT;
 
 import br.com.cbtech.atlas.domain.dto.security.TokenDTO;
-import br.com.cbtech.atlas.exceptions.InvalidJwtAuthenticationException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -117,11 +116,11 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        DecodedJWT decodedJWT = decodedToken(token);
         try {
+            DecodedJWT decodedJWT = decodedToken(token);
             return decodedJWT.getExpiresAt().after(new Date());
         } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT Token!");
+            return false;
         }
     }
 }
