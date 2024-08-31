@@ -1,7 +1,7 @@
 package br.com.cbtech.atlas.converter;
 
 import br.com.cbtech.atlas.domain.User;
-import br.com.cbtech.atlas.domain.dto.security.UserDTO;
+import br.com.cbtech.atlas.domain.dto.UserDTO;
 
 import static java.util.Objects.isNull;
 

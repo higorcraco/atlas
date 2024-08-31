@@ -2,7 +2,7 @@ package br.com.cbtech.atlas.controllers;
 
 import br.com.cbtech.atlas.converter.UserDTOConverter;
 import br.com.cbtech.atlas.domain.User;
-import br.com.cbtech.atlas.domain.dto.security.UserDTO;
+import br.com.cbtech.atlas.domain.dto.UserDTO;
 import br.com.cbtech.atlas.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
