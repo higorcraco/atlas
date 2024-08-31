@@ -2,6 +2,12 @@ import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "../config/AuthContext";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import UsersPage from "../pages/users/UsersPage";
+
+const privateRoutes = [
+  { path: "/home", component: <Home /> },
+  { path: "/users", component: <UsersPage /> },
+];
 
 const MainRoutes = () => (
   <Routes>
@@ -15,15 +21,13 @@ const MainRoutes = () => (
           </RequireAuth>
         }
       />
-      <Route
-        key={"/home"}
-        path={"/home"}
-        element={
-          <RequireAuth>
-            <Home />
-          </RequireAuth>
-        }
-      />
+      {privateRoutes.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={<RequireAuth>{route.component}</RequireAuth>}
+        />
+      ))}
     </Route>
   </Routes>
 );
