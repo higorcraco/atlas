@@ -1,4 +1,4 @@
-package br.com.cbtech.atlas.domain.dto.security;
+package br.com.cbtech.atlas.domain.dto;
 
 import lombok.Data;
 
