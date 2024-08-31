@@ -1,4 +1,10 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthService } from "../services";
 import { LoggedUser } from "../types";
@@ -7,7 +13,6 @@ interface AuthContextType {
   loggedUser: LoggedUser | null;
   signin: (username: string, password: string) => void;
   refreshToken: () => void;
-  loadUserData: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,21 +32,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const navigate = useNavigate();
   const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(null);
 
-  const loadUserData = () => {
-    console.log("useEffect AuthProvider");
-
+  useMemo(() => {
     const username = localStorage.getItem("user");
     const acessToken = localStorage.getItem("token");
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (username && acessToken && refreshToken) {
-      console.log("save loggedUser");
-      saveLoggeduser(username, acessToken, refreshToken);
+      setLoggedUser({ username, acessToken, refreshToken });
     }
-
-    console.log("loggedUser AuthProvider", loggedUser);
-    return username;
-  };
+  }, []);
 
   const from = location.state?.from?.pathname || "/";
 
@@ -73,9 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider
-      value={{ loggedUser, signin, refreshToken, loadUserData }}
-    >
+    <AuthContext.Provider value={{ loggedUser, signin, refreshToken }}>
       {children}
     </AuthContext.Provider>
   );

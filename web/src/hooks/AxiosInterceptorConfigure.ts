@@ -1,14 +1,15 @@
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../config/AuthContext";
 
 const useAxiosInterceptorConfigure = () => {
   const auth = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   axios.interceptors.request.use((config) => {
-    console.log("config.baseURL", config);
     const token = localStorage.getItem("token");
     if (token && !config.url?.includes("/auth/")) {
-      console.log("adicionou header");
       config.headers["Authorization"] = `Bearer ${token}`;
     }
 
@@ -27,7 +28,7 @@ const useAxiosInterceptorConfigure = () => {
           const refreshToken = localStorage.getItem("refreshToken");
 
           if (!refreshToken || !auth.loggedUser?.username) {
-            console.log("Não foi possivel atualizar o token");
+            console.error("Não foi possivel atualizar o token");
           }
 
           auth.refreshToken();
@@ -36,7 +37,7 @@ const useAxiosInterceptorConfigure = () => {
           ] = `Bearer ${auth.loggedUser?.acessToken}`;
           return axios(originalRequest);
         } catch (error) {
-          window.location.href = "/login";
+          navigate(location.state?.from?.pathname || "/", { replace: true });
 
           return Promise.reject(error);
         }

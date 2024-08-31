@@ -29,17 +29,9 @@ const MainRoutes = () => (
 );
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  const { loggedUser, loadUserData } = useAuth();
+  const { loggedUser } = useAuth();
   const location = useLocation();
-
-  let user = loggedUser?.username;
-
-  if (!user) {
-    user = loadUserData() || "";
-  }
-
-  console.log("user", user);
-  if (!user) {
+  if (!loggedUser?.username) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
