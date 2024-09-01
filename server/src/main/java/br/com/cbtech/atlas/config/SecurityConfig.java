@@ -1,9 +1,8 @@
 package br.com.cbtech.atlas.config;
 
-import br.com.cbtech.atlas.exceptions.handler.CustomAuthenticationEntryPoint;
 import br.com.cbtech.atlas.security.JWT.JwtTokenFilter;
 import br.com.cbtech.atlas.security.JWT.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,22 +29,20 @@ import java.util.Map;
 @Configuration
 public class SecurityConfig {
     private final JwtTokenProvider tokenProvider;
-    @Qualifier("customAuthenticationEntryPoint")
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final ObjectMapper objectMapper;
 
     private static final String PBKDF2_ENCONDER = "pbkdf2";
 
-    public SecurityConfig(JwtTokenProvider tokenProvider,
-                          CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+    public SecurityConfig(JwtTokenProvider tokenProvider, ObjectMapper objectMapper) {
         this.tokenProvider = tokenProvider;
-        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.objectMapper = objectMapper;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        JwtTokenFilter customFilter = new JwtTokenFilter(tokenProvider);
+        JwtTokenFilter customFilter = new JwtTokenFilter(tokenProvider, objectMapper);
 
-        return http.httpBasic(basic -> basic.authenticationEntryPoint(customAuthenticationEntryPoint))
+        return http.httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(
