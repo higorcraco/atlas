@@ -20,16 +20,17 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserDTOConverter converter = new UserDTOConverter();
 
     @PostMapping
     public ResponseEntity<UserDTO> addUser(@RequestBody User user) {
-        UserDTO dto = UserDTOConverter.to(userService.addCommonUser(user));
+        UserDTO dto = converter.to(userService.addCommonUser(user));
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
-        List<UserDTO> dtoList = userService.findAll().stream().map(UserDTOConverter::to).toList();
+        List<UserDTO> dtoList = userService.findAll().stream().map(converter::to).toList();
 
         return ResponseEntity.ok(dtoList);
     }
