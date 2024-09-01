@@ -5,8 +5,8 @@ import br.com.cbtech.atlas.domain.dto.UserDTO;
 
 import static java.util.Objects.isNull;
 
-public class UserDTOConverter {
-    public static UserDTO to(User entity) {
+public class UserDTOConverter implements DTOConverter<User, UserDTO> {
+    public UserDTO to(User entity) {
         if (isNull(entity)) {
             return null;
         }
