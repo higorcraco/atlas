@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../config/AuthContext";
 import { User } from "../types/User";
 
@@ -12,6 +13,10 @@ const Login = () => {
 
     signin(user.username!, user.password!);
   };
+
+  if (loggedUser?.username) {
+    return <Navigate to="/home" replace />;
+  }
 
   return (
     <Card>
