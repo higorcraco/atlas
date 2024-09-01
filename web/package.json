@@ -17,7 +17,9 @@
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
-    "vite-tsconfig-paths": "^5.0.1"
+    "sweetalert2-react-content": "^5.0.7",
+    "vite-tsconfig-paths": "^5.0.1",
+    "vue-sweetalert2": "^5.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
