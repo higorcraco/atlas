@@ -26,9 +26,7 @@ export const login = (username: string, password: string) => {
 export const refreshToken = async (username: string, refreshToken: string) => {
   try {
     return await axios
-      .put(`${resource}/refresh/${username}`, undefined, {
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      })
+      .put(`${resource}/refresh/${username}`, { refreshToken })
       .then(({ data }) => {
         setTokens(data);
         return data;
