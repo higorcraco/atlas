@@ -1,13 +1,8 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthService } from "../services";
 import { LoggedUser } from "../types";
+import { alertError } from "./Notification";
 
 interface AuthContextType {
   loggedUser: LoggedUser | null;
@@ -30,17 +25,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(null);
-
-  useMemo(() => {
+  const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(() => {
     const username = localStorage.getItem("user");
     const acessToken = localStorage.getItem("token");
     const refreshToken = localStorage.getItem("refreshToken");
 
-    if (username && acessToken && refreshToken) {
-      setLoggedUser({ username, acessToken, refreshToken });
-    }
-  }, []);
+    return username && acessToken && refreshToken
+      ? { username, acessToken, refreshToken }
+      : null;
+  });
 
   const from = location.state?.from?.pathname || "/";
 
@@ -63,12 +56,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const refreshToken = () => {
-    AuthService.refreshToken(
-      loggedUser!.username!,
-      loggedUser!.refreshToken!
-    ).then(({ data }) => {
-      saveLoggeduser(data.username, data.acessToken, data.refreshToken);
-    });
+    AuthService.refreshToken(loggedUser!.username!, loggedUser!.refreshToken!)
+      .then(({ data }) => {
+        saveLoggeduser(data.username, data.acessToken, data.refreshToken);
+      })
+      .catch((error) => {
+        setLoggedUser(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        alertError(error);
+        return Promise.reject(error);
+      });
   };
 
   return (
