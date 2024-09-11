@@ -1,6 +1,7 @@
 package br.com.cbtech.atlas.controllers;
 
 import br.com.cbtech.atlas.domain.dto.security.AccountCredentialsDTO;
+import br.com.cbtech.atlas.domain.dto.security.RefreshTokenDTO;
 import br.com.cbtech.atlas.domain.dto.security.TokenDTO;
 import br.com.cbtech.atlas.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,12 +35,12 @@ public class AuthController {
 
     @PutMapping(value = "/refresh/{username}")
     public ResponseEntity<?> refreshToken(@PathVariable("username") String username,
-                                          @RequestHeader("Authorization") String refreshToken) {
-        if (Objects.isNull(refreshToken) || refreshToken.isBlank()) {
+                                          @RequestBody RefreshTokenDTO refreshTokenDTO) {
+        if (Objects.isNull(refreshTokenDTO.getRefreshToken()) || refreshTokenDTO.getRefreshToken().isBlank()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         }
 
-        TokenDTO token = authService.refreshToken(username, refreshToken);
+        TokenDTO token = authService.refreshToken(username, refreshTokenDTO.getRefreshToken());
 
         if (Objects.isNull(token)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");

@@ -12,7 +12,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Component
@@ -25,7 +24,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
-                LocalDate.now(),
                 "Authentication failed",
                 ""
         );

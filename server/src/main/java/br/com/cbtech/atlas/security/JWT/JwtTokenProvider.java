@@ -1,6 +1,7 @@
 package br.com.cbtech.atlas.security.JWT;
 
 import br.com.cbtech.atlas.domain.dto.security.TokenDTO;
+import br.com.cbtech.atlas.exceptions.InvalidJwtAuthenticationException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -60,12 +61,17 @@ public class JwtTokenProvider {
     }
 
     public TokenDTO refreshToken(String refreshToken) {
-        refreshToken = removeBearerString(refreshToken);
+        try {
+            refreshToken = removeBearerString(refreshToken);
 
-        DecodedJWT decodedJWT = decodedToken(refreshToken);
-        String username = decodedJWT.getSubject();
-        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
-        return createAccessToken(username, roles);
+            DecodedJWT decodedJWT = decodedToken(refreshToken);
+            String username = decodedJWT.getSubject();
+            List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+            return createAccessToken(username, roles);
+        } catch (Exception e) {
+            throw new InvalidJwtAuthenticationException(e.getMessage());
+        }
+
     }
 
     private String getAcessToken(String username, List<String> roles, Date now, Date validity) {
@@ -120,7 +126,7 @@ public class JwtTokenProvider {
             DecodedJWT decodedJWT = decodedToken(token);
             return decodedJWT.getExpiresAt().after(new Date());
         } catch (Exception e) {
-            return false;
+            throw new InvalidJwtAuthenticationException(e.getMessage());
         }
     }
 }
