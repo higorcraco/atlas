@@ -1,5 +1,6 @@
 import { Container } from "react-bootstrap";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import NavbarApp from "../components/Navbar";
 import { useAuth } from "../config/AuthContext";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -12,47 +13,49 @@ const privateRoutes = [
   { path: "/tasks", component: <TasksPage /> },
 ];
 
-const MainRoutes = () => (
-  <Routes>
-    <Route
-      element={
-        <Container
-          fluid
-          style={{ width: "1024px" }}
-          className="justify-content-center"
-        >
-          <Outlet />
-        </Container>
-      }
-    >
-      <Route key={"/login"} path={"/login"} element={<Login />} />
+const MainRoutes = () => {
+  const { loggedUser } = useAuth();
+  return (
+    <Routes>
       <Route
-        path="/"
         element={
-          <RequireAuth>
-            <Home />
-          </RequireAuth>
+          <>
+            {loggedUser?.acessToken && <NavbarApp />}
+            <Container
+              fluid
+              style={{ width: "1024px", margin: "2em auto" }}
+              className="justify-content-center"
+            >
+              <Outlet />
+            </Container>
+          </>
         }
-      />
-      {privateRoutes.map((route) => (
+      >
+        <Route key={"/login"} path={"/login"} element={<Login />} />
         <Route
-          key={route.path}
-          path={route.path}
-          element={<RequireAuth>{route.component}</RequireAuth>}
+          path="/"
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
         />
-      ))}
-    </Route>
-  </Routes>
-);
+        {privateRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<RequireAuth>{route.component}</RequireAuth>}
+          />
+        ))}
+      </Route>
+    </Routes>
+  );
+};
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const { loggedUser } = useAuth();
   const location = useLocation();
   if (!loggedUser?.username) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
