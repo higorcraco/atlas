@@ -1,3 +1,4 @@
+import { Task } from "./Task";
 import { LoggedUser, User } from "./User";
 
-export type { LoggedUser, User };
+export type { LoggedUser, Task, User };
