@@ -1,14 +1,3 @@
-#root {
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #888;
-  max-width: 1140px;
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+:root {
+  --bs-primary: var(--primary-color);
 }
