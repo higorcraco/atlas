@@ -55,16 +55,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  const logout = () => {
+    setLoggedUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    window.location.href = "/login";
+  };
+
   const refreshToken = () => {
-    AuthService.refreshToken(loggedUser!.username!, loggedUser!.refreshToken!)
+    return AuthService.refreshToken(
+      loggedUser!.username!,
+      loggedUser!.refreshToken!
+    )
       .then(({ data }) => {
         saveLoggeduser(data.username, data.acessToken, data.refreshToken);
+        return data;
       })
       .catch((error) => {
-        setLoggedUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
+        logout();
         alertError(error);
         return Promise.reject(error);
       });

@@ -33,7 +33,7 @@ const useAxiosInterceptorConfigure = () => {
             console.error("Não foi possivel atualizar o token");
           }
 
-          auth.refreshToken();
+          await auth.refreshToken();
 
           // axios.defaults.headers.common[
           //   "Authorization"
@@ -48,6 +48,8 @@ const useAxiosInterceptorConfigure = () => {
         alertError(error);
         console.log(error);
       }
+
+      return Promise.reject(error);
     }
   );
 };
