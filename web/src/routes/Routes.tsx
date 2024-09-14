@@ -23,7 +23,11 @@ const MainRoutes = () => {
             {loggedUser?.acessToken && <NavbarApp />}
             <Container
               fluid
-              style={{ width: "1024px", margin: "2em auto" }}
+              style={{
+                width: "1024px",
+                margin: "0 auto",
+                padding: "2em 2em",
+              }}
               className="justify-content-center"
             >
               <Outlet />
