@@ -1,17 +1,30 @@
+import { Container } from "react-bootstrap";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "../config/AuthContext";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import TasksPage from "../pages/tasks/TasksPage";
 import UsersPage from "../pages/users/UsersPage";
 
 const privateRoutes = [
   { path: "/home", component: <Home /> },
   { path: "/users", component: <UsersPage /> },
+  { path: "/tasks", component: <TasksPage /> },
 ];
 
 const MainRoutes = () => (
   <Routes>
-    <Route element={<Outlet />}>
+    <Route
+      element={
+        <Container
+          fluid
+          style={{ width: "1024px" }}
+          className="justify-content-center"
+        >
+          <Outlet />
+        </Container>
+      }
+    >
       <Route key={"/login"} path={"/login"} element={<Login />} />
       <Route
         path="/"

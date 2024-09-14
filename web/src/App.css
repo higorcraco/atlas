@@ -2,6 +2,7 @@
   margin: 0 auto;
   padding: 2rem;
   background-color: #888;
+  max-width: 1140px;
 }
 
 .card {
