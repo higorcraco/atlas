@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    window.location.href = "/login";
+    navigate("/login", { replace: true });
   };
 
   const refreshToken = () => {
