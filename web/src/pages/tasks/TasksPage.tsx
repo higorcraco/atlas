@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Form, Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
+import Checkbox from "../../components/Checkbox";
 import Fab from "../../components/FAB";
+import RoundButton from "../../components/RoundButton";
 import { TaskService } from "../../services";
 import { Task } from "../../types";
 import TaskForm from "./TaskForm";
@@ -56,8 +58,8 @@ const TasksPage = () => {
         {task.position} - {task.description}
       </td>
       <td className="text-center">
-        <Form.Check
-          type="checkbox"
+        <Checkbox
+          id={`completed-${task.id}`}
           checked={task.completed}
           onChange={() => onUpdateCompleted(task)}
         />
@@ -68,36 +70,12 @@ const TasksPage = () => {
           justifyContent: "end",
         }}
       >
-        <Button
-          className="rounded-circle mx-1"
-          variant="light"
-          style={{
-            width: "30px",
-            height: "30px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 0,
-          }}
-          onClick={() => onEdit(task)}
-        >
+        <RoundButton variant="light" onClick={() => onEdit(task)}>
           <BsPencil size={14} />
-        </Button>
-        <Button
-          className="rounded-circle  mx-1"
-          variant="light"
-          style={{
-            width: "30px",
-            height: "30px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 0,
-          }}
-          onClick={() => onDelete(task)}
-        >
+        </RoundButton>
+        <RoundButton variant="light" onClick={() => onDelete(task)}>
           <BsTrash size={14} />
-        </Button>
+        </RoundButton>
       </td>
     </tr>
   );
