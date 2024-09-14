@@ -1,3 +1,13 @@
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import {
+  faChevronDown,
+  faChevronUp,
+  faGear,
+  faHome,
+  faTasks,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createContext,
   FC,
@@ -7,7 +17,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { BiChevronDown } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import "./sidebar.css";
 
@@ -29,7 +38,7 @@ const useSidebarContext = () => {
 interface SidebarItemProps {
   id: string;
   label: string;
-  icon?: string;
+  icon?: IconProp;
   path: string;
 }
 
@@ -47,7 +56,7 @@ const SidebarItem: FC<SidebarItemProps> = ({ id, label, icon, path }) => {
       <>
         <input type="radio" id={id} name="sidebar" onClick={onClick} />
         <label htmlFor={id}>
-          {icon && <i className={icon}></i>}
+          {icon && <FontAwesomeIcon icon={icon} />}
           <p>{label}</p>
         </label>
       </>
@@ -58,7 +67,7 @@ const SidebarItem: FC<SidebarItemProps> = ({ id, label, icon, path }) => {
 interface SidebarSubMenuProps {
   id: string;
   label: string;
-  icon?: string;
+  icon?: IconProp;
   children: ReactNode;
 }
 
@@ -81,10 +90,13 @@ const SidebarSubMenu: FC<SidebarSubMenuProps> = ({
           onClick={() => setIsOpen((prev) => !prev)}
         />
         <label htmlFor={id}>
-          {icon && <i className={icon}></i>}
+          {icon && <FontAwesomeIcon icon={icon} />}
           <p>{label}</p>
           {/* <i className="ai-chevron-down-small"></i> */}
-          <BiChevronDown />
+          <FontAwesomeIcon
+            className="open-btn"
+            icon={isOpen ? faChevronUp : faChevronDown}
+          />
         </label>
 
         <ul
@@ -119,10 +131,10 @@ const Sidebar: FC<SidebarProps> = ({ visible, onVisibilityChange }) => {
     <SidebarContext.Provider value={{ isVisible, setIsVisible }}>
       <aside className={`sidebar ${isVisible ? "visible" : ""}`}>
         <ul>
-          <SidebarItem id="home" label="Home" path="/home" />
-          <SidebarItem id="users" label="Users" path="/users" />
-          <SidebarItem id="tasks" label="Tasks" path="/tasks" />
-          <SidebarSubMenu id="settings" label="Settings">
+          <SidebarItem id="home" label="Home" path="/home" icon={faHome} />
+          <SidebarItem id="users" label="Users" path="/users" icon={faUser} />
+          <SidebarItem id="tasks" label="Tasks" path="/tasks" icon={faTasks} />
+          <SidebarSubMenu id="settings" label="Settings" icon={faGear}>
             <SidebarItem id="tasks" label="Tasks" path="/tasks" />
           </SidebarSubMenu>
         </ul>
