@@ -27,13 +27,13 @@ import java.util.Map;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig {
+public class SecurityConfiguration {
     private final JwtTokenProvider tokenProvider;
     private final ObjectMapper objectMapper;
 
     private static final String PBKDF2_ENCONDER = "pbkdf2";
 
-    public SecurityConfig(JwtTokenProvider tokenProvider, ObjectMapper objectMapper) {
+    public SecurityConfiguration(JwtTokenProvider tokenProvider, ObjectMapper objectMapper) {
         this.tokenProvider = tokenProvider;
         this.objectMapper = objectMapper;
     }
