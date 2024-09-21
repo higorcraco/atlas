@@ -15,6 +15,10 @@ import java.util.UUID;
 public class TaskService {
     private final TaskRepository repository;
 
+    public Page<Task> findByRsql(String search, Pageable pageable) {
+        return repository.findByRsql(search, pageable);
+    }
+
     public Page<Task> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
