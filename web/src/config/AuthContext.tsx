@@ -6,8 +6,9 @@ import { alertError } from "./Notification";
 
 interface AuthContextType {
   loggedUser: LoggedUser | null;
+  setLoggedUser: (user: LoggedUser) => void;
   signin: (username: string, password: string) => void;
-  refreshToken: () => void;
+  refreshToken: () => Promise<LoggedUser>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -80,7 +81,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ loggedUser, signin, refreshToken }}>
+    <AuthContext.Provider
+      value={{ loggedUser, signin, refreshToken, setLoggedUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
