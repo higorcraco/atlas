@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableJpaRepositories(basePackages = {"br.com.cbtech.atlas.repositories"}, repositoryBaseClass = RsqlRepositoryImpl.class)
+@EnableJpaRepositories(
+        basePackages = {"br.com.cbtech.atlas.repositories"},
+        repositoryBaseClass = RsqlRepositoryImpl.class)
 @EnableTransactionManagement
 @Configuration
 public class JpaConfiguration {
