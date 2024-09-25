@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import NavbarApp from "../components/Navbar";
 import { useAuth } from "../config/AuthContext";
@@ -21,17 +20,9 @@ const MainRoutes = () => {
         element={
           <>
             {loggedUser?.acessToken && <NavbarApp />}
-            <Container
-              fluid
-              style={{
-                width: "1024px",
-                margin: "0 auto",
-                padding: "2em 2em",
-              }}
-              className="justify-content-center"
-            >
+            <div className="wrapper">
               <Outlet />
-            </Container>
+            </div>
           </>
         }
       >

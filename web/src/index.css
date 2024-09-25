@@ -41,3 +41,15 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+.wrapper {
+  margin: 0 auto;
+  padding: 2em 2em;
+  background-color: rgb(223, 222, 222);
+  display: flex;
+  justify-content: center;
+}
+
+.clickable {
+  cursor: pointer;
+}

@@ -7,6 +7,6 @@ export const alertError = (text: string) => {
     text: text,
     showConfirmButton: false,
     timer: 4000,
-    background: "#e36666",
+    background: "var(--primary-color)",
   });
 };
