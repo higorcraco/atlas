@@ -19,9 +19,9 @@ const Login = () => {
   }
 
   return (
-    <Card>
+    <Card style={{ height: "300px", width: "300px" }}>
       <Container>
-        <Row className="justify-content-md-center">
+        <Row className="justify-content-md-center mt-4">
           <Col md="auto">
             <Form onSubmit={onSubmit}>
               <Form.Group className="mb-3" controlId="formUsername">

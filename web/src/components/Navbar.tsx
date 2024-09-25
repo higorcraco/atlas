@@ -22,7 +22,6 @@ const NavbarApp = () => {
             className="logo-color"
           >
             <FontAwesomeIcon icon={faEarthAmericas} />
-            <i className="fa-solid fa-earth-americas"></i>
             Atlas
           </Navbar.Brand>
         </Container>

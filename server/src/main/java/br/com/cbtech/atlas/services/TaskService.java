@@ -8,12 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository repository;
+
+    public Page<Task> findByRsql(String search, Pageable pageable) {
+        return repository.findByRsql(search, pageable);
+    }
 
     public Page<Task> findAll(Pageable pageable) {
         return repository.findAll(pageable);
@@ -26,7 +28,7 @@ public class TaskService {
         return repository.saveAndFlush(task);
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 }

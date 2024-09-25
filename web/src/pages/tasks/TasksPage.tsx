@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
-import { BsPencil, BsTrash } from "react-icons/bs";
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Container,
+  Row,
+  Table,
+} from "react-bootstrap";
+import { BsTrash } from "react-icons/bs";
 import Checkbox from "../../components/Checkbox";
 import Fab from "../../components/FAB";
 import RoundButton from "../../components/RoundButton";
 import { TaskService } from "../../services";
 import { Task } from "../../types";
 import TaskForm from "./TaskForm";
+import { CompletedStatusEnum, completedStatusEnumFormated } from "./TaskUtils";
 
 const TasksPage = () => {
   const [taskList, setTaskList] = useState<Task[]>([]);
@@ -14,12 +22,11 @@ const TasksPage = () => {
   const [editTask, setEditTask] = useState<Task | undefined>(undefined);
 
   useEffect(() => {
-    search();
+    doSearch("completed=='false'");
   }, []);
 
-  const search = () =>
-    TaskService.findAll("position").then(({ data }) => {
-      console.log("data", data);
+  const doSearch = (search?: string) =>
+    TaskService.findAll(search, "position").then(({ data }) => {
       setTaskList(data.content);
     });
 
@@ -38,24 +45,24 @@ const TasksPage = () => {
   };
 
   const onSave = () => {
-    search();
+    doSearch();
     closeForm();
   };
 
   const onDelete = (task: Task) => {
-    TaskService.deleteById(task.id).finally(() => search());
+    TaskService.deleteById(task.id!).finally(() => doSearch());
   };
 
   const onUpdateCompleted = (task: Task) => {
     TaskService.save({ ...task, completed: !task.completed }).then(() =>
-      search()
+      doSearch()
     );
   };
 
   const renderTask = (task: Task) => (
-    <tr>
-      <td>
-        {task.position} - {task.description}
+    <tr id={`row-${task.id}`}>
+      <td onClick={() => onEdit(task)} className="clickable">
+        {task.position} - {task.title}
       </td>
       <td className="text-center">
         <Checkbox
@@ -70,9 +77,6 @@ const TasksPage = () => {
           justifyContent: "end",
         }}
       >
-        <RoundButton variant="light" onClick={() => onEdit(task)}>
-          <BsPencil size={14} />
-        </RoundButton>
         <RoundButton variant="light" onClick={() => onDelete(task)}>
           <BsTrash size={14} />
         </RoundButton>
@@ -80,14 +84,40 @@ const TasksPage = () => {
     </tr>
   );
 
+  const onChangeCompletedStatus = (completedStatus: CompletedStatusEnum) => {
+    let search = "";
+
+    if (completedStatus !== CompletedStatusEnum.ALL) {
+      search = `completed=='${
+        completedStatus === CompletedStatusEnum.COMPLETED ? "true" : "false"
+      }'`;
+    }
+
+    doSearch(search);
+  };
+
+  const renderCompletedStatusButtons = () =>
+    Object.values(CompletedStatusEnum).map((value) => (
+      <Button variant="primary" onClick={() => onChangeCompletedStatus(value)}>
+        {completedStatusEnumFormated[value]}
+      </Button>
+    ));
+
   return (
     <Container>
-      <Table>
+      <Row>
+        <Col>
+          <ButtonGroup>{renderCompletedStatusButtons()}</ButtonGroup>
+        </Col>
+      </Row>
+      <Table bordered className="mt-3">
         <thead>
           <tr>
-            <th>Description</th>
-            <th className="text-center">Completed</th>
-            <th></th>
+            <th id="column-task">Task</th>
+            <th id="column-task" className="text-center">
+              Completed
+            </th>
+            <th id="column-options"></th>
           </tr>
         </thead>
         <tbody>{taskList.map(renderTask)}</tbody>

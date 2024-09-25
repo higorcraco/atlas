@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,8 +22,9 @@ public class TaskController {
     private final TaskService service;
 
     @GetMapping
-    public ResponseEntity<Page<Task>> findAll(Pageable pageable) {
-        return ResponseEntity.ok(service.findAll(pageable));
+    public ResponseEntity<Page<Task>> findByRsql(@RequestParam(value = "search", required = false) String search,
+                                                 Pageable pageable) {
+        return ResponseEntity.ok(service.findByRsql(search, pageable));
     }
 
     @PostMapping
@@ -33,7 +33,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }

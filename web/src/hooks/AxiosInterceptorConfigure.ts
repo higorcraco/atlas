@@ -1,12 +1,8 @@
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../config/AuthContext";
-import { alertError } from "../config/Notification";
 
 const useAxiosInterceptorConfigure = () => {
   const auth = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   axios.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
@@ -35,18 +31,12 @@ const useAxiosInterceptorConfigure = () => {
 
           await auth.refreshToken();
 
-          // axios.defaults.headers.common[
-          //   "Authorization"
-          // ] = `Bearer ${auth.loggedUser?.acessToken}`;
-          return axios(originalRequest);
+          return await axios(originalRequest);
         } catch (error) {
-          navigate(location.state?.from?.pathname || "/", { replace: true });
+          window.location.href = "/login";
 
           return Promise.reject(error);
         }
-      } else {
-        alertError(error);
-        console.log(error);
       }
 
       return Promise.reject(error);
