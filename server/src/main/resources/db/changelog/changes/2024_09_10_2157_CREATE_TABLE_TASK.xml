@@ -2,15 +2,21 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="higor.craco" id="add_table_user_entity">
+    <changeSet author="higor.craco" id="add_table_task">
+        <preConditions onFail="MARK_RAN" onFailMessage="Table Task already exists">
+            <not>
+                <tableExists tableName="task"/>
+            </not>
+        </preConditions>
         <createTable tableName="task">
-            <column name="id" type="uuid">
+            <column name="id" type="bigint">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="task_pk"/>
             </column>
             <column name="position" type="bigint"/>
-            <column name="description" type="varchar(150)">
+            <column name="title" type="varchar(150)">
                 <constraints nullable="false"/>
             </column>
+            <column name="description" type="text"/>
             <column name="completed" type="boolean">
                 <constraints nullable="false"/>
             </column>

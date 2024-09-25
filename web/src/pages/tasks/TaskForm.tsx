@@ -11,7 +11,7 @@ type Props = {
 };
 
 const InitialValue = {
-  id: "",
+  title: "",
   description: "",
   position: 0,
   completed: false,
@@ -37,23 +37,43 @@ const TaskForm: FC<Props> = ({ value, show, onClose, onSave }) => {
       backdrop="static"
       keyboard={false}
       centered
+      size="lg"
     >
       <Modal.Header closeButton>
         <Modal.Title>{value ? "Edit Task" : "New Task"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Control
-            type="text"
-            placeholder="Enter description"
-            value={task.description}
-            onChange={(event) => {
-              setTask((prev) => ({
-                ...prev,
-                description: event.target.value,
-              }));
-            }}
-          />
+          <Form.Group className="mb-3" controlId="formTitle">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter title"
+              value={task.title}
+              onChange={(event) => {
+                setTask((prev) => ({
+                  ...prev,
+                  title: event.target.value,
+                }));
+              }}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formDescription">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={10}
+              placeholder="Enter description"
+              value={task.description || ""}
+              onChange={(event) => {
+                setTask((prev) => ({
+                  ...prev,
+                  description: event.target.value,
+                }));
+              }}
+            />
+          </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
