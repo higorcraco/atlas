@@ -29,11 +29,9 @@ public class LoggedUserService {
             throw new SecurityContextHolderException("Authentication Principal not found.");
         }
 
-        if (!(authentication.getPrincipal() instanceof UserDetails)) {
+        if (!(authentication.getPrincipal() instanceof UserDetails userDetails)) {
             throw new SecurityContextHolderException("Principal it's not a UserDetails instance.");
         }
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         loggedUser = new LoggedUser();
         loggedUser.setUsername(userDetails.getUsername());
