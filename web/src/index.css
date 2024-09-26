@@ -43,6 +43,7 @@ h1 {
 }
 
 .wrapper {
+  min-height: calc(100vh - 3.5em);
   margin: 0 auto;
   padding: 2em 2em;
   background-color: rgb(223, 222, 222);
