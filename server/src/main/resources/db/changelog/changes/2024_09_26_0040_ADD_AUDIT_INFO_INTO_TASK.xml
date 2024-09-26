@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="higor.craco" id="add_audit_info_into_task">
+        <preConditions onFail="MARK_RAN" onFailMessage="Table Task already have audit info">
+            <not>
+                <columnExists tableName="task" columnName="created_by"/>
+                <columnExists tableName="task" columnName="created_date"/>
+                <columnExists tableName="task" columnName="last_modified_by"/>
+                <columnExists tableName="task" columnName="last_modified_date"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="task">
+            <column name="created_by" type="varchar(50)"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
