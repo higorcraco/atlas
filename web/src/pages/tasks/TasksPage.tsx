@@ -10,6 +10,7 @@ import {
 import { BsTrash } from "react-icons/bs";
 import Checkbox from "../../components/Checkbox";
 import Fab from "../../components/FAB";
+import FormatDate, { DateFormatType } from "../../components/FormatDate";
 import RoundButton from "../../components/RoundButton";
 import { TaskService } from "../../services";
 import { Task } from "../../types";
@@ -64,6 +65,12 @@ const TasksPage = () => {
       <td onClick={() => onEdit(task)} className="clickable">
         {task.position} - {task.title}
       </td>
+      <td>
+        <FormatDate
+          date={task.auditInfo?.createdDate}
+          type={DateFormatType.TIMESTAMP}
+        />
+      </td>
       <td className="text-center">
         <Checkbox
           id={`completed-${task.id}`}
@@ -114,7 +121,8 @@ const TasksPage = () => {
         <thead>
           <tr>
             <th id="column-task">Task</th>
-            <th id="column-task" className="text-center">
+            <th id="column-creation-date">Creation Date</th>
+            <th id="column-completed" className="text-center">
               Completed
             </th>
             <th id="column-options"></th>

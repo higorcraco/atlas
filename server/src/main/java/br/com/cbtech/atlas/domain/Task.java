@@ -1,6 +1,8 @@
 package br.com.cbtech.atlas.domain;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,10 +12,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "task")
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_sequence")
@@ -26,4 +30,7 @@ public class Task {
     private String title;
     private String description;
     private Boolean completed = Boolean.FALSE;
+
+    @Embedded
+    private AuditInfo auditInfo = new AuditInfo();
 }

@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.18.1'
     implementation 'org.liquibase:liquibase-core'
     implementation 'io.github.perplexhub:rsql-querydsl-spring-boot-starter:6.0.23'
+    implementation 'io.projectreactor:reactor-core'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
