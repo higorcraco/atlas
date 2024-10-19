@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Container, Form, Row, Table } from "react-bootstrap";
+import { Container, Form, Row } from "react-bootstrap";
+import Panel from "../../components/Panel";
+import { Table, TableColumn } from "../../components/table/Table";
 import { UserService } from "../../services";
 import { User } from "../../types";
 
@@ -10,41 +12,73 @@ const UsersPage = () => {
     UserService.findAll().then(({ data }) => setUserList(data));
   }, []);
 
-  const getUserRow = (user: User) => {
-    return (
-      <tr>
-        <td>{user.username}</td>
-        <td className="text-center">
-          <Form.Check type="checkbox" checked={!user.isAccountNonExpired} />
-        </td>
-        <td className="text-center">
-          <Form.Check type="checkbox" checked={!user.isAccountNonLocked} />
-        </td>
-        <td className="text-center">
-          <Form.Check type="checkbox" checked={!user.isCredentialsNonExpired} />
-        </td>
-        <td className="text-center">
-          <Form.Check type="checkbox" checked={!user.isEnabled} />
-        </td>
-      </tr>
-    );
+  const doNothing = () => {
+    console.log("Nothing done");
+  };
+
+  const getColumns = (): TableColumn<User>[] => {
+    return [
+      {
+        header: "Username",
+        column: (user) => user.username,
+      },
+      {
+        header: "Account Expired",
+        column: (user) => (
+          <Form.Check
+            type="checkbox"
+            checked={!user.isAccountNonExpired}
+            onChange={doNothing}
+          />
+        ),
+        align: "center",
+      },
+      {
+        header: "Account Locked",
+        column: (user) => (
+          <Form.Check
+            type="checkbox"
+            checked={!user.isAccountNonLocked}
+            onChange={doNothing}
+          />
+        ),
+        align: "center",
+      },
+      {
+        header: "Credentials Expired",
+        column: (user) => (
+          <Form.Check
+            type="checkbox"
+            checked={!user.isCredentialsNonExpired}
+            onChange={doNothing}
+          />
+        ),
+        align: "center",
+      },
+      {
+        header: "Enabled",
+        column: (user) => (
+          <Form.Check
+            type="checkbox"
+            checked={!user.isEnabled}
+            onChange={doNothing}
+          />
+        ),
+        align: "center",
+      },
+    ];
   };
 
   return (
     <Container>
       <Row>
-        <Table>
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Account Expired</th>
-              <th>Account Locked</th>
-              <th>Credentials Expired</th>
-              <th>Enabled</th>
-            </tr>
-          </thead>
-          <tbody>{userList.map((user) => getUserRow(user))}</tbody>
-        </Table>
+        <Panel table>
+          <Table<User>
+            data={userList}
+            columns={getColumns()}
+            keyExtractor={(user) => user.username}
+          />
+        </Panel>
       </Row>
     </Container>
   );
