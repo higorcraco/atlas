@@ -2,48 +2,55 @@ import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import NavbarApp from "../components/Navbar";
 import { useAuth } from "../config/AuthContext";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
-import TasksPage from "../pages/tasks/TasksPage";
-import UsersPage from "../pages/users/UsersPage";
+
+import { lazy, Suspense } from "react";
+const UsersPage = lazy(() => import("../pages/users/UsersPage"));
+const Login = lazy(() => import("../pages/Login"));
+const TasksPage = lazy(() => import("../pages/tasks/TasksPage"));
 
 const privateRoutes = [
-  { path: "/home", component: <Home /> },
   { path: "/users", component: <UsersPage /> },
   { path: "/tasks", component: <TasksPage /> },
+];
+
+const publicRoutes = [
+  { path: "/", component: <Home /> },
+  { path: "/home", component: <Home /> },
+  { path: "/login", component: <Login /> },
 ];
 
 const MainRoutes = () => {
   const { loggedUser } = useAuth();
   return (
-    <Routes>
-      <Route
-        element={
-          <>
-            {loggedUser?.acessToken && <NavbarApp />}
-            <div className="wrapper">
-              <Outlet />
-            </div>
-          </>
-        }
-      >
-        <Route key={"/login"} path={"/login"} element={<Login />} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
         <Route
-          path="/"
           element={
-            <RequireAuth>
-              <Home />
-            </RequireAuth>
+            <>
+              {loggedUser?.acessToken && <NavbarApp />}
+              <div className="wrapper">
+                <Outlet />
+              </div>
+            </>
           }
-        />
-        {privateRoutes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={<RequireAuth>{route.component}</RequireAuth>}
-          />
-        ))}
-      </Route>
-    </Routes>
+        >
+          {publicRoutes.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={route.component}
+            />
+          ))}
+          {privateRoutes.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={<RequireAuth>{route.component}</RequireAuth>}
+            />
+          ))}
+        </Route>
+      </Routes>
+    </Suspense>
   );
 };
 
