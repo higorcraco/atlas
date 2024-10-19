@@ -1,0 +1,38 @@
+.atlas-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.atlas-table th {
+  background: var(--secondary-color);
+  padding: 10px 10px;
+}
+
+.atlas-table td {
+  padding: 5px 10px;
+}
+
+.atlas-table table,
+th,
+td {
+  border: 1px solid;
+}
+
+.atlas-table tr:first-child th {
+  border-top-width: 0px;
+}
+
+.atlas-table tr:last-child td {
+  border-bottom-width: 0px;
+}
+
+.atlas-table tr th:first-child,
+td:first-child {
+  border-left-width: 0px;
+}
+
+.atlas-table tr th:last-child,
+td:last-child {
+  border-right-width: 0px;
+}

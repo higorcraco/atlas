@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  Row,
-  Table,
-} from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, Row } from "react-bootstrap";
 import { BsTrash } from "react-icons/bs";
 import Checkbox from "../../components/Checkbox";
 import Fab from "../../components/FAB";
 import FormatDate, { DateFormatType } from "../../components/FormatDate";
+import Panel from "../../components/Panel";
 import RoundButton from "../../components/RoundButton";
+import { Table, TableColumn } from "../../components/table/Table";
 import { TaskService } from "../../services";
 import { Task } from "../../types";
 import TaskForm from "./TaskForm";
@@ -60,37 +55,6 @@ const TasksPage = () => {
     );
   };
 
-  const renderTask = (task: Task) => (
-    <tr id={`row-${task.id}`}>
-      <td onClick={() => onEdit(task)} className="clickable">
-        {task.position} - {task.title}
-      </td>
-      <td>
-        <FormatDate
-          date={task.auditInfo?.createdDate}
-          type={DateFormatType.TIMESTAMP}
-        />
-      </td>
-      <td className="text-center">
-        <Checkbox
-          id={`completed-${task.id}`}
-          checked={task.completed}
-          onChange={() => onUpdateCompleted(task)}
-        />
-      </td>
-      <td
-        style={{
-          display: "flex",
-          justifyContent: "end",
-        }}
-      >
-        <RoundButton variant="light" onClick={() => onDelete(task)}>
-          <BsTrash size={14} />
-        </RoundButton>
-      </td>
-    </tr>
-  );
-
   const onChangeCompletedStatus = (completedStatus: CompletedStatusEnum) => {
     let search = "";
 
@@ -110,6 +74,39 @@ const TasksPage = () => {
       </Button>
     ));
 
+  const getColumns = (): TableColumn<Task>[] => [
+    { header: "Task", column: (task) => task.id },
+    { header: "Title", column: (task) => task.title },
+    {
+      header: "Date",
+      column: (task) => (
+        <FormatDate
+          date={task.auditInfo?.createdDate}
+          type={DateFormatType.TIMESTAMP}
+        />
+      ),
+    },
+    {
+      header: "Completed",
+      column: (task) => (
+        <Checkbox
+          id={`completed-${task.id}`}
+          checked={task.completed}
+          onChange={() => onUpdateCompleted(task)}
+        />
+      ),
+      align: "center",
+    },
+    {
+      header: "",
+      column: (task) => (
+        <RoundButton variant="light" onClick={() => onDelete(task)}>
+          <BsTrash size={14} />
+        </RoundButton>
+      ),
+    },
+  ];
+
   return (
     <Container>
       <Row>
@@ -117,19 +114,13 @@ const TasksPage = () => {
           <ButtonGroup>{renderCompletedStatusButtons()}</ButtonGroup>
         </Col>
       </Row>
-      <Table bordered className="mt-3">
-        <thead>
-          <tr>
-            <th id="column-task">Task</th>
-            <th id="column-creation-date">Creation Date</th>
-            <th id="column-completed" className="text-center">
-              Completed
-            </th>
-            <th id="column-options"></th>
-          </tr>
-        </thead>
-        <tbody>{taskList.map(renderTask)}</tbody>
-      </Table>
+      <Panel table>
+        <Table<Task>
+          data={taskList}
+          keyExtractor={(task) => task.id}
+          columns={getColumns()}
+        ></Table>
+      </Panel>
 
       <TaskForm
         show={showForm}
