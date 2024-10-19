@@ -9,19 +9,17 @@ const NavbarApp = () => {
 
   return (
     <>
-      <Navbar
-        bg="dark"
-        data-bs-theme="dark"
-        style={{ width: "100%" }}
-        sticky="top"
-      >
+      <Navbar bg="dark" data-bs-theme="dark" sticky="top">
         <Container>
           <Navbar.Brand
             onClick={() => setShowSidebar((prev) => !prev)}
             style={{ cursor: "pointer" }}
-            className="logo-color"
+            className="logo-color lastica-font"
           >
-            <FontAwesomeIcon icon={faEarthAmericas} />
+            <FontAwesomeIcon
+              icon={faEarthAmericas}
+              style={{ marginRight: "0.5em" }}
+            />
             Atlas
           </Navbar.Brand>
         </Container>

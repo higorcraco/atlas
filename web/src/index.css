@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "LASTICA";
+  src: url("/src/assets/fonts/Lastica.ttf") format("trueType");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,7 +12,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,9 +19,12 @@
   -moz-osx-font-smoothing: grayscale;
 
   --primary-color: #a97cff;
+  --secondary-color: #1f2d51;
   --bs-primary: var(--primary-color);
+}
 
-  background-color: #888;
+#root {
+  width: 100%;
 }
 
 .logo-color {
@@ -34,7 +43,6 @@ a:hover {
 body {
   min-width: 320px;
   min-height: 100vh;
-  background-color: #888;
 }
 
 h1 {
@@ -43,14 +51,21 @@ h1 {
 }
 
 .wrapper {
-  min-height: calc(100vh - 3.5em);
+  min-height: 100vh;
   margin: 0 auto;
   padding: 2em 2em;
-  background-color: rgb(223, 222, 222);
+  color: white;
+  background-image: linear-gradient(to right, #2b243f, #1f2d51);
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+.lastica-font {
+  font-family: "LASTICA", sans-serif;
+  line-height: 1.2;
 }
