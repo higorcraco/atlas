@@ -75,8 +75,11 @@ const TasksPage = () => {
     ));
 
   const getColumns = (): TableColumn<Task>[] => [
-    { header: "Task", column: (task) => task.id },
-    { header: "Title", column: (task) => task.title },
+    {
+      header: "Task",
+      column: (task) => `${task.id} - ${task.title}`,
+      onClick: onEdit,
+    },
     {
       header: "Date",
       column: (task) => (
