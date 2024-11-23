@@ -51,7 +51,8 @@ public class SecurityConfiguration {
                         authorizeHttpRequests -> authorizeHttpRequests
                                 .requestMatchers(
                                         "/auth/signin",
-                                        "/auth/refresh/**"
+                                        "/auth/refresh/**",
+                                        "/api/echo/**"
                                 ).permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/users").hasAuthority("ADMIN")
                                 .requestMatchers("/users").denyAll()
