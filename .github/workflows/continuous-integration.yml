@@ -54,7 +54,7 @@ jobs:
 
     - name: push to Docker Hub
       run: |
-        docker ${{ secrets.DOCKER_USERNAME }}/atlas-server:latest ${{ secrets.DOCKER_USERNAME }}/atlas-server:${{ github.run_id }}
+        docker tag ${{ secrets.DOCKER_USERNAME }}/atlas-server:latest ${{ secrets.DOCKER_USERNAME }}/atlas-server:${{ github.run_id }}
 
         docker push ${{ secrets.DOCKER_USERNAME }}/atlas-server:${{ github.run_id }}
         docker push ${{ secrets.DOCKER_USERNAME }}/atlas-server:latest
