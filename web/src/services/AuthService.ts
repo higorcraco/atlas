@@ -1,7 +1,6 @@
 import axios from "axios";
-import API_BASE_URL from "../config/ApiConfig";
 
-const resource = `${API_BASE_URL}/auth`;
+const resource = "/auth";
 
 export const login = (username: string, password: string) => {
   try {
