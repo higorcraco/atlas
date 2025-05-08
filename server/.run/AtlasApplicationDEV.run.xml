@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AtlasApplicationDEV" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="corretto-21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="br.com.cbtech.atlas.AtlasApplication" />
+    <module name="atlas.main" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=dev" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="br.com.cbtech.atlas.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
