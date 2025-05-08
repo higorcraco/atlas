@@ -103,7 +103,7 @@ const TasksPage = () => {
     {
       header: "",
       column: (task) => (
-        <RoundButton variant="light" onClick={() => onDelete(task)}>
+        <RoundButton variant="primary" onClick={() => onDelete(task)}>
           <BsTrash size={14} />
         </RoundButton>
       ),
@@ -117,7 +117,7 @@ const TasksPage = () => {
           <ButtonGroup>{renderCompletedStatusButtons()}</ButtonGroup>
         </Col>
       </Row>
-      <Panel table>
+      <Panel table className="mt-4">
         <Table<Task>
           data={taskList}
           keyExtractor={(task) => task.id}

@@ -3,9 +3,10 @@ import { FC, ReactElement } from "react";
 type Props = {
   children: ReactElement;
   table?: boolean;
+  className?: string;
 };
 
-const Panel: FC<Props> = ({ children, table = false }) => {
+const Panel: FC<Props> = ({ children, table = false, className }) => {
   return (
     <div
       style={{
@@ -15,6 +16,7 @@ const Panel: FC<Props> = ({ children, table = false }) => {
         borderRadius: "0.5em",
         overflow: "hidden",
       }}
+      className={className}
     >
       {children}
     </div>
