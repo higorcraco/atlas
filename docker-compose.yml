@@ -1,7 +1,7 @@
-version: '3.9'
 services:
   db:
     image: postgres:15-alpine
+    container_name: atlas_postgres_db
     restart: always
     environment:
       TZ: America/Sao_Paulo
@@ -10,17 +10,16 @@ services:
       POSTGRES_DB: atlas
     ports:
       - "5433:5432"
-    expose:
-      - 5433
+    volumes:
+      - postgres_atlas_data:/var/lib/postgresql/data
     networks:
       - cbtech-network
-  atlas:
+  atlas-server:
     image: higorcraco/atlas-server
     container_name: atlas-server
     restart: always
     build:
       context: ./server
-    working_dir: /server
     depends_on:
       - db
     environment:
@@ -30,11 +29,29 @@ services:
       SPRING.DATASOURCE.PASSWORD: masterkey
     ports:
       - "8090:8080"
-    expose:
-      - 8090
-    command: gradlew.bat bootRun
     networks:
       - cbtech-network
+
+  atlas-web:
+    image: higorcraco/atlas-web
+    container_name: atlas-web
+    restart: always
+    build:
+      context: ./web
+    ports:
+      - "8000:80"
+    depends_on:
+      - atlas-server
+    environment:
+      TZ: America/Sao_Paulo
+    networks:
+      - cbtech-network
+
+volumes:
+  postgres_atlas_data:
+    driver: local
+
+
 networks:
   cbtech-network:
     driver: bridge

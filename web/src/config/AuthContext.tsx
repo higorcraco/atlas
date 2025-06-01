@@ -50,10 +50,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const signin = (username: string, password: string) => {
-    AuthService.login(username, password).then(({ data }) => {
-      saveLoggeduser(data.username, data.acessToken, data.refreshToken);
-      navigate(from, { replace: true });
-    });
+    AuthService.login(username, password)
+      .then(({ data }) => {
+        saveLoggeduser(data.username, data.acessToken, data.refreshToken);
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        alertError(error.response?.data?.message || error);
+        return Promise.reject(error);
+      });
   };
 
   const logout = () => {
@@ -61,7 +66,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    navigate("/login", { replace: true });
+    navigate("/login", { state: { from: location.pathname }, replace: true });
   };
 
   const refreshToken = () => {

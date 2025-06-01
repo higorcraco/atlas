@@ -1,0 +1,14 @@
+# Ignorar pastas de build locais
+build
+.gradle
+out
+
+# Ignorar arquivos de sistema
+*.iml
+*.log
+*.class
+.DS_Store
+
+# Ignorar o que for de IDE
+.idea/
+.vscode/

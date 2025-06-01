@@ -1,0 +1,31 @@
+name: Publish Dockerhub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker Login
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build with Docker Compose
+        run: docker compose build
+
+      - name: push to Docker Hub
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/atlas:latest ${{ secrets.DOCKER_USERNAME }}/atlas-server:${{ github.run_id }}
+
+          docker push ${{ secrets.DOCKER_USERNAME }}/atlas:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/atlas:latest
