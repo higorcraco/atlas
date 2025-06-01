@@ -39,7 +39,7 @@ services:
     build:
       context: ./web
     ports:
-      - "8000:80"
+      - "80:80"
     depends_on:
       - atlas-server
     environment:
