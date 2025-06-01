@@ -23,9 +23,14 @@ jobs:
       - name: Build with Docker Compose
         run: docker compose build
 
-      - name: push to Docker Hub
+      - name: Push backend
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/atlas:latest ${{ secrets.DOCKER_USERNAME }}/atlas:${{ github.run_id }}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/atlas-server:latest ${{ secrets.DOCKER_USERNAME }}/atlas-server:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/atlas-server:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/atlas-server:latest
 
-          docker push ${{ secrets.DOCKER_USERNAME }}/atlas:${{ github.run_id }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/atlas:latest
+      - name: Push frontend
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/atlas-web:latest ${{ secrets.DOCKER_USERNAME }}/atlas-web:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/atlas-web:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/atlas-web:latest
