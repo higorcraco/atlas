@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactElement } from "react";
-import "./Table.css";
+import "./table.css";
 
 type Header = string | ReactElement;
 type Column<T> = (value: T) => undefined | string | number | ReactElement;
