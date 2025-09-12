@@ -68,7 +68,10 @@ public class SecurityConfiguration {
 //        Another way to implement passwordEncoder
 //        return new BCryptPasswordEncoder();
         Map<String, PasswordEncoder> encoders = new HashMap<>();
-        Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("", 8, 185000, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
+
+        Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(
+                "", 8, 185000, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
+
         encoders.put(PBKDF2_ENCONDER, pbkdf2PasswordEncoder);
         DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder(PBKDF2_ENCONDER, encoders);
         passwordEncoder.setDefaultPasswordEncoderForMatches(pbkdf2PasswordEncoder);
