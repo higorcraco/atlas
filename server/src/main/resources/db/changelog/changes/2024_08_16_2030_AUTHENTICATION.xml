@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet author="higor.craco" id="add_table_permission">
         <createTable tableName="permission">
-            <column autoIncrement="true" name="id" startWith="4" type="BIGINT">
+            <column autoIncrement="true" name="id" startWith="1" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="permission_pk"/>
             </column>
             <column name="description" type="VARCHAR(255)"/>

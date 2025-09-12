@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="higor.craco" id="add_user_master">
+        <preConditions onFail="MARK_RAN" onFailMessage="User master already exists">
+           <sqlCheck expectedResult="0">
+               SELECT COUNT(1) FROM USER_ENTITY U WHERE U.USERNAME = 'master'
+           </sqlCheck>
+        </preConditions>
+        <insert tableName="user_entity">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="username">master</column>
+            <column name="password">453c59a7402f2f0fdba69d7417c1be0b987ca1751296a151f22313c1a65a0e6b20e3f3a10784cff5</column>
+            <column name="enabled">true</column>
+            <column name="account_non_expired">true</column>
+            <column name="account_non_locked">true</column>
+            <column name="credentials_non_expired">true</column>
+        </insert>
+    </changeSet>
+
+    <changeSet author="higor.craco" id="add_user_master_permissions">
+        <preConditions onFail="MARK_RAN" onFailMessage="User master permissions already exists">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1)
+                  FROM USER_ENTITY U
+                 INNER JOIN USER_PERMISSION P ON P.USER_ID = U.ID
+                 WHERE U.USERNAME = 'master'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO USER_PERMISSION (PERMISSION_ID, USER_ID)
+            SELECT P.ID,
+                   (SELECT U.ID FROM USER_ENTITY U WHERE U.USERNAME = 'master')
+             FROM PERMISSION P
+        </sql>
+    </changeSet>
+</databaseChangeLog>
